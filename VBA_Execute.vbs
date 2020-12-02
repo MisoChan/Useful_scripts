@@ -2,8 +2,10 @@ Option Explicit
 
 '--------------------------------------------------------------------
 '
-'   ƒfƒBƒŒƒNƒgƒŠ“àExcelƒtƒ@ƒCƒ‹ƒ}ƒNƒ‡ŸÀsWSH
-'
+'   ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…Excelãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¯ãƒ­é †æ¬¡å®Ÿè¡ŒWSH
+'   ç¬¬ä¸€å¼•æ•°ï¼š ãƒã‚¯ãƒ­å®Ÿè¡Œå¯¾è±¡Excelãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ‘ã‚¹
+'   ç¬¬äºŒå¼•æ•°ï¼š ãƒã‚¯ãƒ­æ ¼ç´Excelãƒ‘ã‚¹
+'   ç¬¬ä¸‰å¼•æ•°ï¼š ãƒã‚¯ãƒ­å®Ÿè¡Œãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£/é–¢æ•°å
 '
 '   Author N.Kishino 2020/11/19
 '
@@ -18,11 +20,11 @@ Dim macrofilepath_array()
 Dim macrofilename
 Dim procname 
 
-' WshShell ƒIƒuƒWƒFƒNƒg
+' WshShell ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 Dim objWshShell     
 Set objWshShell = WScript.CreateObject("WScript.Shell")
 
-'“ú‚ğyyyymmddŒ`®‚É•ÏŠ·
+'æ—¥æ™‚ã‚’yyyymmddå½¢å¼ã«å¤‰æ›
 Function getDate(date)
 	getDate = Year(date)
 	getDate = getDate & Right( "0" & Month(date) , 2)
@@ -30,48 +32,20 @@ Function getDate(date)
 End Function
 
 
-'ƒtƒHƒ‹ƒ_ì¬
-Private function CreateFolder()
-    
-    Dim objFSO      ' FileSystemObject
-    Dim strFolder   ' ƒtƒHƒ‹ƒ_–¼
-    Dim strMessage  ' •\¦—pƒƒbƒZ[ƒW
-    
-    strFolder = objWshShell.CurrentDirectory & "\" & "SQL_" & getDate(Now())
-    Set objFSO = WScript.CreateObject("Scripting.FileSystemObject")
-    If Err.Number = 0 Then
-
-        If objFSO.FolderExists(strFolder) = True Then
-            objFSO.DeleteFolder(strFolder)
-            WScript.Echo "ƒtƒHƒ‹ƒ_ " & strFolder & " ‚ğíœ‚µ‚Ü‚·B"
-        end if
-
-        objFSO.CreateFolder(strFolder)
-        If Err.Number = 0 Then
-            strMessage = "ƒtƒHƒ‹ƒ_ " & strFolder & " ‚ğì¬‚µ‚Ü‚µ‚½B"
-        Else
-            strMessage = "ƒGƒ‰[: " & Err.Description
-        End If
-
-        WScript.Echo strMessage
-    Else
-        WScript.Echo "ƒGƒ‰[: " & Err.Description
-    End If
-	CreateFolder = strFolder 
-end function
 
 
 
-'ƒtƒ@ƒCƒ‹ƒpƒXw’è ‘æˆêˆø” ƒGƒNƒZƒ‹Ši”[ƒfƒBƒŒƒNƒgƒŠ‚ğ“ü—Í‚·‚éB
+
+'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹æŒ‡å®š ç¬¬ä¸€å¼•æ•° ã‚¨ã‚¯ã‚»ãƒ«æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å…¥åŠ›ã™ã‚‹ã€‚
 filepath = WScript.Arguments(0)
 
-'ƒ}ƒNƒ‚ªŠi”[‚³‚ê‚½Excel‚ğŠi”[
+'ãƒã‚¯ãƒ­ãŒæ ¼ç´ã•ã‚ŒãŸExcelã‚’æ ¼ç´
 macrofilepath = WScript.Arguments(1)
 
-'Às‚·‚éƒ}ƒNƒ–¼
+'å®Ÿè¡Œã™ã‚‹ãƒã‚¯ãƒ­å
 procname = WScript.Arguments(2)
 
-'‘æˆêˆø”‚ğŒ³‚Éƒtƒ@ƒCƒ‹ˆê——‚ğæ“¾
+'ç¬¬ä¸€å¼•æ•°ã‚’å…ƒã«ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§ã‚’å–å¾—
 Dim filereader
 set filereader = CreateObject("Scripting.FileSystemObject")
 
@@ -80,11 +54,10 @@ set filereader = filereader.getFolder(filepath)
 Dim excel 
 Set excel = CreateObject("Excel.Application")
 excel.DisplayAlerts = False
-'Excel‚ğŒ©‚¦‚é‚æ‚¤‚É‚µ‚ÄÅ‘O—ñ•\¦
+'Excelã‚’è¦‹ãˆã‚‹ã‚ˆã†ã«ã—ã¦æœ€å‰åˆ—è¡¨ç¤º
 excel.Visible = true
 CreateObject("WScript.Shell").AppActivate excel.Caption
-Dim exportdir
-exportdir=CreateFolder()
+
 
 Dim fso
 Set fso = CreateObject("Scripting.FileSystemObject")
